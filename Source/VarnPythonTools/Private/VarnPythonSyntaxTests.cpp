@@ -41,7 +41,7 @@ namespace
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
-	FVarnPythonSyntaxTest, "VarnPythonTools.Syntax",
+	FVarnPythonSyntaxTest, "Varn.PythonTools.Syntax",
 	EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool FVarnPythonSyntaxTest::RunTest(const FString& Parameters)
@@ -67,7 +67,7 @@ bool FVarnPythonSyntaxTest::RunTest(const FString& Parameters)
 		TEXT("String['']"));
 	Check(TEXT("t = '''a\n")
 			TEXT("b''' # c"),
-		TEXT("String['''a\nb'''] Comment[# c]"));
+		TEXT("String['''a\\nb'''] Comment[# c]"));
 	Check(TEXT("s = 'abc\n")
 			TEXT("t = 2"),
 		TEXT("String['abc] Number[2]"));
@@ -133,7 +133,7 @@ bool FVarnPythonSyntaxTest::RunTest(const FString& Parameters)
 		TEXT("Member[self]"));
 	Check(TEXT("x = '''unterminated\n")
 			TEXT("still"),
-		TEXT("String['''unterminated\nstill]"));
+		TEXT("String['''unterminated\\nstill]"));
 	Check(TEXT("\"\"\"doc\"\"\"\n")
 			TEXT("x"),
 		TEXT("String[\"\"\"doc\"\"\"]"));

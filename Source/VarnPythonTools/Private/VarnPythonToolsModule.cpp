@@ -9,6 +9,7 @@
 #include "Styling/AppStyle.h"
 #include "ToolMenus.h"
 #include "VarnPythonToolsSettings.h"
+#include "VarnPythonToolsStyle.h"
 #include "Widgets/Docking/SDockTab.h"
 #include "Widgets/SNullWidget.h"
 
@@ -18,9 +19,6 @@ namespace
 {
 	const FName PythonBrowserTabName(TEXT("VarnPythonBrowser"));
 	const FName& PythonEditorTabName = SVarnPythonEditor::TabName;
-	// The engine's terminal-window glyph (the console variables icon). The app style has no Python icon,
-	// and the Python logo is a trademark, so the tab doesn't use it.
-	const FName PythonBrowserIconName(TEXT("MainFrame.BrowseCVars"));
 }
 
 class FVarnPythonToolsModule : public IModuleInterface
@@ -33,20 +31,22 @@ public:
 			return;
 		}
 
+		FVarnPythonToolsStyle::Initialize();
+
 		FGlobalTabmanager::Get()->RegisterNomadTabSpawner(
 			                        PythonBrowserTabName,
 			                        FOnSpawnTab::CreateRaw(this, &FVarnPythonToolsModule::SpawnTab))
 		                        .SetDisplayName(LOCTEXT("Title", "Varn Python Browser"))
 		                        .SetTooltipText(LOCTEXT("TabTip", "Browse and run Python scripts."))
-		                        .SetIcon(FSlateIcon(FAppStyle::GetAppStyleSetName(), PythonBrowserIconName))
+		                        .SetIcon(FVarnPythonToolsStyle::GetLogoIcon())
 		                        .SetMenuType(ETabSpawnerMenuType::Hidden);
 
 		FGlobalTabmanager::Get()->RegisterNomadTabSpawner(
 			                        PythonEditorTabName,
 			                        FOnSpawnTab::CreateRaw(this, &FVarnPythonToolsModule::SpawnEditorTab))
-		                        .SetDisplayName(LOCTEXT("EditorTitle", "Python Editor"))
+		                        .SetDisplayName(LOCTEXT("EditorTitle", "Varn Python Editor"))
 		                        .SetTooltipText(LOCTEXT("EditorTabTip", "Browse Python scripts and open them in tabs."))
-		                        .SetIcon(FSlateIcon(FAppStyle::GetAppStyleSetName(), TEXT("MainFrame.OpenSourceCodeEditor")))
+		                        .SetIcon(FVarnPythonToolsStyle::GetLogoIcon())
 		                        .SetMenuType(ETabSpawnerMenuType::Hidden);
 		FTabManager::RegisterDefaultTabWindowSize(FTabId(PythonEditorTabName), FVector2D(1100, 700));
 
@@ -88,6 +88,7 @@ public:
 		FGlobalTabmanager::Get()->UnregisterNomadTabSpawner(PythonBrowserTabName);
 		FGlobalTabmanager::Get()->UnregisterNomadTabSpawner(PythonEditorTabName);
 		FTabManager::UnregisterDefaultTabWindowSize(FTabId(PythonEditorTabName));
+		FVarnPythonToolsStyle::Shutdown();
 	}
 private:
 	void RegisterMenus()
@@ -99,7 +100,7 @@ private:
 			PythonBrowserTabName,
 			LOCTEXT("Title", "Varn Python Browser"),
 			LOCTEXT("MenuTip", "Browse and run Python scripts."),
-			FSlateIcon(FAppStyle::GetAppStyleSetName(), PythonBrowserIconName),
+			FVarnPythonToolsStyle::GetLogoIcon(),
 			FUIAction(
 				FExecuteAction::CreateLambda(
 					[]
@@ -108,9 +109,9 @@ private:
 					})));
 		Section.AddMenuEntry(
 			PythonEditorTabName,
-			LOCTEXT("EditorTitle", "Python Editor"),
+			LOCTEXT("EditorTitle", "Varn Python Editor"),
 			LOCTEXT("EditorMenuTip", "Browse Python scripts and open them in tabs."),
-			FSlateIcon(FAppStyle::GetAppStyleSetName(), TEXT("MainFrame.OpenSourceCodeEditor")),
+			FVarnPythonToolsStyle::GetLogoIcon(),
 			FUIAction(
 				FExecuteAction::CreateLambda(
 					[]
@@ -137,7 +138,8 @@ private:
 	TSharedRef<SDockTab> SpawnEditorTab(const FSpawnTabArgs& Args)
 	{
 		const TSharedRef<SDockTab> Tab = SNew(SDockTab)
-			.TabRole(ETabRole::NomadTab);
+			.TabRole(ETabRole::NomadTab)
+			.Label(LOCTEXT("TabLabel", "Varn PyEditor"));
 		// The editor builds its own tab manager for opened scripts, so it needs the tab that hosts it.
 		Tab->SetContent(SNew(SVarnPythonEditor, Tab));
 		EditorTab = Tab;

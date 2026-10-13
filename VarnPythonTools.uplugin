@@ -4,7 +4,7 @@
 	"VersionName": "1.0.0",
 	"FriendlyName": "Varn Python Tools",
 	"Description": "Browse and run Python scripts.",
-	"Category": "Editor",
+	"Category": "Rock",
 	"CreatedBy": "Broken Rock Studios",
 	"CanContainContent": true,
 	"Modules": [

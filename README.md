@@ -111,6 +111,12 @@ BuildPlugin. This is an editor-only plugin; scripts are not gameplay code.
 - `hello_world.py`
 - TODO
 
+## Trademarks
+
+- "Python" and the Python logos are trademarks of the Python Software Foundation (PSF).
+- This project is not affiliated with the PSF.
+- The Python trademarks are used here with permission.
+
 References:
 
 - https://dev.epicgames.com/documentation/unreal-engine/scripting-the-unreal-editor-using-python

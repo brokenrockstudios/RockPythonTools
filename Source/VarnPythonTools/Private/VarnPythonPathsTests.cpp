@@ -6,7 +6,7 @@
 #include "Misc/AutomationTest.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
-	FVarnPythonPathsTest, "VarnPythonTools.Paths",
+	FVarnPythonPathsTest, "Varn.PythonTools.Paths",
 	EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
 bool FVarnPythonPathsTest::RunTest(const FString& Parameters)

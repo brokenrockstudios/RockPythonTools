@@ -4,6 +4,7 @@
 
 #include "SVarnPythonDocument.h"
 #include "VarnPythonScriptSources.h"
+#include "VarnPythonToolsStyle.h"
 #include "Framework/Docking/TabManager.h"
 #include "Misc/Paths.h"
 #include "Styling/AppStyle.h"
@@ -195,7 +196,8 @@ TSharedRef<ITableRow> SVarnPythonEditor::GenerateRow(FVarnPythonEditorNodePtr No
 			[
 				SNew(SImage)
 				.Image_Lambda([this, Node] { return GetNodeIcon(Node); })
-				.ColorAndOpacity(FSlateColor::UseForeground())
+				// Folders follow the row's text color; the logo keeps its own colors.
+				.ColorAndOpacity(Node->Kind == EKind::File ? FSlateColor(FLinearColor::White) : FSlateColor::UseForeground())
 			]
 			+ SHorizontalBox::Slot().FillWidth(1).VAlign(VAlign_Center)
 			[
@@ -237,7 +239,7 @@ const FSlateBrush* SVarnPythonEditor::GetNodeIcon(const FVarnPythonEditorNodePtr
 {
 	if (Node->Kind == EKind::File)
 	{
-		return FAppStyle::GetBrush("MainFrame.OpenSourceCodeEditor");
+		return FVarnPythonToolsStyle::GetLogoBrush();
 	}
 	return FAppStyle::GetBrush(Tree->IsItemExpanded(Node) ? "Icons.FolderOpen" : "Icons.FolderClosed");
 }
@@ -271,7 +273,7 @@ void SVarnPythonEditor::OpenDocument(const FString& Filename)
 		[
 			SNew(SVarnPythonDocument).Filename(Filename)
 		];
-	Tab->SetTabIcon(FAppStyle::GetBrush("MainFrame.OpenSourceCodeEditor"));
+	Tab->SetTabIcon(FVarnPythonToolsStyle::GetLogoBrush());
 	OpenDocuments.Add(Key, Tab);
 	TabManager->InsertNewDocumentTab(DocumentPlaceholderId, FTabManager::ESearchPreference::PreferLiveTab, Tab);
 }
